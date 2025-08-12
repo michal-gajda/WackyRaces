@@ -164,7 +164,7 @@ public sealed class TableEntity
         foreach (var coord in coordinates)
         {
             var cellValue = this.GetValue(coord);
-            if (!cellValue.IsT0 || !string.IsNullOrEmpty(cellValue.AsT0)) // Not empty string
+            if (cellValue.IsT0 is false || string.IsNullOrEmpty(cellValue.AsT0) is false) // Not empty string
             {
                 count++;
             }
@@ -271,7 +271,7 @@ public sealed class TableEntity
 
             if (char.IsWhiteSpace(c))
             {
-                if (!string.IsNullOrEmpty(currentToken))
+                if (string.IsNullOrEmpty(currentToken) is false)
                 {
                     tokens.Add(currentToken);
                     currentToken = "";
@@ -279,7 +279,7 @@ public sealed class TableEntity
             }
             else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')')
             {
-                if (!string.IsNullOrEmpty(currentToken))
+                if (string.IsNullOrEmpty(currentToken) is false)
                 {
                     tokens.Add(currentToken);
                     currentToken = "";
@@ -292,7 +292,7 @@ public sealed class TableEntity
             }
         }
 
-        if (!string.IsNullOrEmpty(currentToken))
+        if (string.IsNullOrEmpty(currentToken) is false)
         {
             tokens.Add(currentToken);
         }

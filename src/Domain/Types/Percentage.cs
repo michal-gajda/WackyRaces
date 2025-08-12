@@ -18,14 +18,14 @@ public readonly record struct Percentage
 
         var trimmed = text.Trim();
 
-        if (!trimmed.EndsWith('%'))
+        if (trimmed.EndsWith('%') is false)
         {
             throw new InvalidPercentageFormatException(trimmed);
         }
 
         var numberPart = trimmed.Substring(0, trimmed.Length - 1);
 
-        if (!decimal.TryParse(numberPart, out var value))
+        if (decimal.TryParse(numberPart, out var value) is false)
         {
             throw new InvalidPercentageFormatException(trimmed);
         }
