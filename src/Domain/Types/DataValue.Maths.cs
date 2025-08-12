@@ -1,6 +1,8 @@
 namespace WackyRaces.Domain.Types;
 
-public sealed partial class DataValue
+using WackyRaces.Domain.Exceptions;
+
+public partial class DataValue
 {
     public static DataValue operator +(DataValue left, DataValue right) => Add(left, right);
     public static DataValue operator -(DataValue left, DataValue right) => Sub(left, right);
@@ -28,21 +30,23 @@ public sealed partial class DataValue
     public static DataValue operator /(decimal left, DataValue right) => Div(new DataValue(left), right);
 
     public static DataValue operator +(DataValue value) => value.Match(
-        s => throw new InvalidOperationException("Unary + not supported for string."),
+        s => throw new UnsupportedDataValueOperationException("Unary +", "string"),
         i => new DataValue(+i),
         d => new DataValue(+d),
-        b => throw new InvalidOperationException("Unary + not supported for bool."),
-        dt => throw new InvalidOperationException("Unary + not supported for DateTime."),
-        p => throw new InvalidOperationException("Unary + not supported for Percentage.")
+        b => throw new UnsupportedDataValueOperationException("Unary +", "bool"),
+        dt => throw new UnsupportedDataValueOperationException("Unary +", "DateTime"),
+        p => throw new UnsupportedDataValueOperationException("Unary +", "Percentage"),
+        f => throw new UnsupportedDataValueOperationException("Unary +", "Function")
     );
 
     public static DataValue operator -(DataValue value) => value.Match(
-        s => throw new InvalidOperationException("Unary - not supported for string."),
+        s => throw new UnsupportedDataValueOperationException("Unary -", "string"),
         i => new DataValue(-i),
         d => new DataValue(-d),
-        b => throw new InvalidOperationException("Unary - not supported for bool."),
-        dt => throw new InvalidOperationException("Unary - not supported for DateTime."),
-        p => throw new InvalidOperationException("Unary - not supported for Percentage.")
+        b => throw new UnsupportedDataValueOperationException("Unary -", "bool"),
+        dt => throw new UnsupportedDataValueOperationException("Unary -", "DateTime"),
+        p => throw new UnsupportedDataValueOperationException("Unary -", "Percentage"),
+        f => throw new UnsupportedDataValueOperationException("Unary -", "Function")
     );
 
     private static DataValue Add(DataValue left, DataValue right)
@@ -55,7 +59,8 @@ public sealed partial class DataValue
                 d2 => new DataValue(i + d2),
                 _b => Throw<bool>(),
                 _dt => Throw<DateTime>(),
-                _p => Throw<Percentage>("Adding Percentage to number is ambiguous.")
+                _p => Throw<Percentage>("Adding Percentage to number is ambiguous."),
+                _f => Throw<Function>()
             ),
             d => right.Match<DataValue>(
                 _s => Throw<string>(),
@@ -63,11 +68,13 @@ public sealed partial class DataValue
                 d2 => new DataValue(d + d2),
                 _b => Throw<bool>(),
                 _dt => Throw<DateTime>(),
-                _p => Throw<Percentage>("Adding Percentage to number is ambiguous.")
+                _p => Throw<Percentage>("Adding Percentage to number is ambiguous."),
+                _f => Throw<Function>()
             ),
             _b => Throw<bool>(),
             _dt => Throw<DateTime>(),
-            _p => Throw<Percentage>("Adding Percentage to number is ambiguous.")
+            _p => Throw<Percentage>("Adding Percentage to number is ambiguous."),
+            _f => Throw<Function>()
         );
     }
 
@@ -81,7 +88,8 @@ public sealed partial class DataValue
                 d2 => new DataValue(i - d2),
                 _b => Throw<bool>(),
                 _dt => Throw<DateTime>(),
-                _p => Throw<Percentage>("Subtracting Percentage from number is ambiguous.")
+                _p => Throw<Percentage>("Subtracting Percentage from number is ambiguous."),
+                _f => Throw<Function>()
             ),
             d => right.Match<DataValue>(
                 _s => Throw<string>(),
@@ -89,11 +97,13 @@ public sealed partial class DataValue
                 d2 => new DataValue(d - d2),
                 _b => Throw<bool>(),
                 _dt => Throw<DateTime>(),
-                _p => Throw<Percentage>("Subtracting Percentage from number is ambiguous.")
+                _p => Throw<Percentage>("Subtracting Percentage from number is ambiguous."),
+                _f => Throw<Function>()
             ),
             _b => Throw<bool>(),
             _dt => Throw<DateTime>(),
-            _p => Throw<Percentage>("Subtracting Percentage from number is ambiguous.")
+            _p => Throw<Percentage>("Subtracting Percentage from number is ambiguous."),
+            _f => Throw<Function>()
         );
     }
 
@@ -107,7 +117,8 @@ public sealed partial class DataValue
                 d2 => new DataValue(i * d2),
                 _b => Throw<bool>(),
                 _dt => Throw<DateTime>(),
-                p2 => new DataValue(i * ToRatio(p2))
+                p2 => new DataValue(i * ToRatio(p2)),
+                _f => Throw<Function>()
             ),
             d => right.Match<DataValue>(
                 _s => Throw<string>(),
@@ -115,7 +126,8 @@ public sealed partial class DataValue
                 d2 => new DataValue(d * d2),
                 _b => Throw<bool>(),
                 _dt => Throw<DateTime>(),
-                p2 => new DataValue(d * ToRatio(p2))
+                p2 => new DataValue(d * ToRatio(p2)),
+                _f => Throw<Function>()
             ),
             _b => Throw<bool>(),
             _dt => Throw<DateTime>(),
@@ -125,8 +137,10 @@ public sealed partial class DataValue
                 d2 => new DataValue(ToRatio(p) * d2),
                 _b2 => Throw<bool>(),
                 _dt2 => Throw<DateTime>(),
-                p2 => new DataValue(ToRatio(p) * ToRatio(p2))
-            )
+                p2 => new DataValue(ToRatio(p) * ToRatio(p2)),
+                _f2 => Throw<Function>()
+            ),
+            _f => Throw<Function>()
         );
     }
 
@@ -140,7 +154,8 @@ public sealed partial class DataValue
                 d2 => new DataValue(i / d2),
                 _b => Throw<bool>(),
                 _dt => Throw<DateTime>(),
-                p2 => new DataValue(i / ToRatio(p2))
+                p2 => new DataValue(i / ToRatio(p2)),
+                _f => Throw<Function>()
             ),
             d => right.Match<DataValue>(
                 _s => Throw<string>(),
@@ -148,7 +163,8 @@ public sealed partial class DataValue
                 d2 => new DataValue(d / d2),
                 _b => Throw<bool>(),
                 _dt => Throw<DateTime>(),
-                p2 => new DataValue(d / ToRatio(p2))
+                p2 => new DataValue(d / ToRatio(p2)),
+                _f => Throw<Function>()
             ),
             _b => Throw<bool>(),
             _dt => Throw<DateTime>(),
@@ -158,12 +174,14 @@ public sealed partial class DataValue
                 d2 => new DataValue(ToRatio(p) / d2),
                 _b2 => Throw<bool>(),
                 _dt2 => Throw<DateTime>(),
-                p2 => new DataValue(ToRatio(p) / ToRatio(p2))
-            )
+                p2 => new DataValue(ToRatio(p) / ToRatio(p2)),
+                _f2 => Throw<Function>()
+            ),
+            _f => Throw<Function>()
         );
     }
 
-    private static DataValue Throw<T>(string? msg = null) => throw new InvalidOperationException(msg ?? $"Operation not supported for {typeof(T).Name}.");
+    private static DataValue Throw<T>(string? msg = null) => throw new UnsupportedDataValueOperationException(msg ?? "Operation", typeof(T).Name);
 
     private static decimal ToRatio(Percentage p)
     {

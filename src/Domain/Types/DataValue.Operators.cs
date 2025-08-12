@@ -36,7 +36,8 @@ public sealed partial class DataValue
             d => d.GetHashCode(),
             b => b.GetHashCode(),
             dt => dt.GetHashCode(),
-            p => p.GetHashCode()
+            p => p.GetHashCode(),
+            f => f.GetHashCode()
         );
 
     private bool ValueEquals(DataValue other)
@@ -46,6 +47,7 @@ public sealed partial class DataValue
             d => other.TryPickT2(out var oDec, out _) && d == oDec,
             b => other.TryPickT3(out var oBool, out _) && b == oBool,
             dt => other.TryPickT4(out var oDt, out _) && dt == oDt,
-            p => other.TryPickT5(out var oP, out _) && p.Equals(oP)
+            p => other.TryPickT5(out var oP, out _) && p.Equals(oP),
+            f => other.TryPickT6(out var oF, out _) && f.Equals(oF)
         );
 }

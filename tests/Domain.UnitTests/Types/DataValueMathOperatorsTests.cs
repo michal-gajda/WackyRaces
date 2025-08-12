@@ -1,4 +1,4 @@
-namespace WackyRaces.Domain.UnitTests;
+namespace WackyRaces.Domain.UnitTests.Types;
 
 using WackyRaces.Domain.Types;
 using WackyRaces.Domain.Exceptions;
