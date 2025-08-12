@@ -15,27 +15,27 @@ public sealed class CustomExceptionsTests
         var right = new DataValue(42);
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => left + right);
-        ex.ShouldBeOfType<UnsupportedDataValueOperationException>();
-        ex.Message.ShouldContain("operation not supported");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => left + right);
+        exception.ShouldBeOfType<UnsupportedDataValueOperationException>();
+        exception.Message.ShouldContain("operation not supported");
     }
 
     [TestMethod]
     public void InvalidPercentageFormat_ShouldThrowCustomException()
     {
         // Act & Assert
-        var ex = Should.Throw<InvalidPercentageFormatException>(() => Percentage.Parse("not a percentage"));
-        ex.ShouldBeOfType<InvalidPercentageFormatException>();
-        ex.Message.ShouldContain("Invalid percentage format");
+        var exception = Should.Throw<InvalidPercentageFormatException>(() => Percentage.Parse("not a percentage"));
+        exception.ShouldBeOfType<InvalidPercentageFormatException>();
+        exception.Message.ShouldContain("Invalid percentage format");
     }
 
     [TestMethod]
     public void EmptyPercentageText_ShouldThrowCustomException()
     {
         // Act & Assert
-        var ex = Should.Throw<EmptyPercentageTextException>(() => Percentage.Parse(""));
-        ex.ShouldBeOfType<EmptyPercentageTextException>();
-        ex.Message.ShouldContain("Percentage text cannot be null, empty, or contain only whitespace characters");
+        var exception = Should.Throw<EmptyPercentageTextException>(() => Percentage.Parse(""));
+        exception.ShouldBeOfType<EmptyPercentageTextException>();
+        exception.Message.ShouldContain("Percentage text cannot be null, empty, or contain only whitespace characters");
     }
 
     [TestMethod]

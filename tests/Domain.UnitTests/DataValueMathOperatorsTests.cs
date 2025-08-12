@@ -155,8 +155,8 @@ public sealed class DataValueMathOperatorsTests
         var right = new DataValue(new Percentage(50m));
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => left + right);
-        ex.Message.ShouldContain("Adding Percentage to number is ambiguous");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => left + right);
+        exception.Message.ShouldContain("Adding Percentage to number is ambiguous");
     }
 
     #endregion
@@ -229,8 +229,8 @@ public sealed class DataValueMathOperatorsTests
         var right = new DataValue(new Percentage(50m));
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => left - right);
-        ex.Message.ShouldContain("Subtracting Percentage from number is ambiguous");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => left - right);
+        exception.Message.ShouldContain("Subtracting Percentage from number is ambiguous");
     }
 
     #endregion
@@ -486,8 +486,8 @@ public sealed class DataValueMathOperatorsTests
         var value = new DataValue("test");
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => +value);
-        ex.Message.ShouldContain("Unary + operation not supported for string type");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => +value);
+        exception.Message.ShouldContain("Unary + operation not supported for string type");
     }
 
     [TestMethod]
@@ -497,8 +497,8 @@ public sealed class DataValueMathOperatorsTests
         var value = new DataValue(true);
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => +value);
-        ex.Message.ShouldContain("Unary + operation not supported for bool type");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => +value);
+        exception.Message.ShouldContain("Unary + operation not supported for bool type");
     }
 
     [TestMethod]
@@ -508,8 +508,8 @@ public sealed class DataValueMathOperatorsTests
         var value = new DataValue(DateTime.Now);
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => +value);
-        ex.Message.ShouldContain("Unary + operation not supported for DateTime type");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => +value);
+        exception.Message.ShouldContain("Unary + operation not supported for DateTime type");
     }
 
     [TestMethod]
@@ -519,8 +519,8 @@ public sealed class DataValueMathOperatorsTests
         var value = new DataValue(new Percentage(50m));
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => +value);
-        ex.Message.ShouldContain("Unary + operation not supported for Percentage type");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => +value);
+        exception.Message.ShouldContain("Unary + operation not supported for Percentage type");
     }
 
     [TestMethod]
@@ -558,8 +558,8 @@ public sealed class DataValueMathOperatorsTests
         var value = new DataValue("test");
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => -value);
-        ex.Message.ShouldContain("Unary - operation not supported for string type");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => -value);
+        exception.Message.ShouldContain("Unary - operation not supported for string type");
     }
 
     [TestMethod]
@@ -569,8 +569,8 @@ public sealed class DataValueMathOperatorsTests
         var value = new DataValue(true);
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => -value);
-        ex.Message.ShouldContain("Unary - operation not supported for bool type");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => -value);
+        exception.Message.ShouldContain("Unary - operation not supported for bool type");
     }
 
     [TestMethod]
@@ -580,8 +580,8 @@ public sealed class DataValueMathOperatorsTests
         var value = new DataValue(DateTime.Now);
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => -value);
-        ex.Message.ShouldContain("Unary - operation not supported for DateTime type");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => -value);
+        exception.Message.ShouldContain("Unary - operation not supported for DateTime type");
     }
 
     [TestMethod]
@@ -591,8 +591,8 @@ public sealed class DataValueMathOperatorsTests
         var value = new DataValue(new Percentage(50m));
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => -value);
-        ex.Message.ShouldContain("Unary - operation not supported for Percentage type");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => -value);
+        exception.Message.ShouldContain("Unary - operation not supported for Percentage type");
     }
 
     #endregion
@@ -692,8 +692,8 @@ public sealed class DataValueMathOperatorsTests
         var value = new DataValue(new Function("AVERAGE(B1:B5)"));
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => +value);
-        ex.Message.ShouldContain("Unary + operation not supported for Function type");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => +value);
+        exception.Message.ShouldContain("Unary + operation not supported for Function type");
     }
 
     [TestMethod]
@@ -703,8 +703,8 @@ public sealed class DataValueMathOperatorsTests
         var value = new DataValue(new Function("COUNT(C1:C20)"));
 
         // Act & Assert
-        var ex = Should.Throw<UnsupportedDataValueOperationException>(() => -value);
-        ex.Message.ShouldContain("Unary - operation not supported for Function type");
+        var exception = Should.Throw<UnsupportedDataValueOperationException>(() => -value);
+        exception.Message.ShouldContain("Unary - operation not supported for Function type");
     }
 
     #endregion
