@@ -25,7 +25,7 @@ public sealed class TableEntityExceptionTests
         var tableId = new TableId(Guid.NewGuid());
         var table = new TableEntity(tableId, "sample");
 
-        table.SetCell(Coordinate.Parse("A1"), new DataValue("=INVALID(A1)"));
+        table.SetCell(Coordinate.Parse("A1"), new DataValue("=INVALID(B1)"));
 
         Should.Throw<UnknownFunctionException>(() => table.GetValue(Coordinate.Parse("A1")));
     }
@@ -107,5 +107,27 @@ public sealed class TableEntityExceptionTests
         table.SetCell(Coordinate.Parse("B1"), new DataValue("=A1+A2"));
 
         Should.Throw<UnsupportedDataValueOperationException>(() => table.GetValue(Coordinate.Parse("B1")));
+    }
+
+    [TestMethod]
+    public void ShouldThrowCircularReferenceException_WhenCellReferencesItself()
+    {
+        var tableId = new TableId(Guid.NewGuid());
+        var table = new TableEntity(tableId, "sample");
+
+        table.SetCell(Coordinate.Parse("A1"), new DataValue("=A1"));
+
+        Should.Throw<CircularReferenceException>(() => table.GetValue(Coordinate.Parse("A1")));
+    }
+
+    [TestMethod]
+    public void ShouldThrowCircularReferenceException_WhenFunctionReferencesItself()
+    {
+        var tableId = new TableId(Guid.NewGuid());
+        var table = new TableEntity(tableId, "sample");
+
+        table.SetCell(Coordinate.Parse("A1"), new DataValue("=SUM(A1)"));
+
+        Should.Throw<CircularReferenceException>(() => table.GetValue(Coordinate.Parse("A1")));
     }
 }

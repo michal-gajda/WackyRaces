@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 public sealed class TableEntity
 {
     private readonly Dictionary<Coordinate, DataValue> cells = new();
+    private readonly HashSet<Coordinate> evaluationStack = new();
 
     public ReadOnlyDictionary<Coordinate, DataValue> Cells => this.cells.AsReadOnly();
 
@@ -44,7 +45,20 @@ public sealed class TableEntity
 
     public DataValue GetValue(Coordinate coordinate)
     {
-        return this.Recalculate(coordinate);
+        if (this.evaluationStack.Contains(coordinate))
+        {
+            throw new CircularReferenceException(coordinate);
+        }
+
+        this.evaluationStack.Add(coordinate);
+        try
+        {
+            return this.Recalculate(coordinate);
+        }
+        finally
+        {
+            this.evaluationStack.Remove(coordinate);
+        }
     }
 
     private DataValue Recalculate(Coordinate coordinate)
@@ -80,6 +94,46 @@ public sealed class TableEntity
             // Evaluate RPN expression
             return EvaluateRPN(rpnTokens);
         }
+        catch (CircularReferenceException)
+        {
+            throw;
+        }
+        catch (UnknownFunctionException)
+        {
+            throw;
+        }
+        catch (InvalidFunctionSyntaxException)
+        {
+            throw;
+        }
+        catch (InvalidRangeFormatException)
+        {
+            throw;
+        }
+        catch (UnsupportedComplexRangeException)
+        {
+            throw;
+        }
+        catch (InvalidNumberTokenException)
+        {
+            throw;
+        }
+        catch (InsufficientOperandsException)
+        {
+            throw;
+        }
+        catch (UnknownOperatorException)
+        {
+            throw;
+        }
+        catch (InvalidExpressionException)
+        {
+            throw;
+        }
+        catch (UnsupportedDataValueOperationException)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
             return new DataValue($"#ERROR: {ex.Message}");
@@ -88,8 +142,14 @@ public sealed class TableEntity
 
     private bool IsFunction(string expression)
     {
-        return expression.Contains("(") && expression.Contains(")") &&
-               (expression.StartsWith("SUM(") || expression.StartsWith("AVG(") || expression.StartsWith("COUNT("));
+        // Check if it looks like a function call (has parentheses) or a function name
+        if (expression.Contains("(") && expression.Contains(")"))
+        {
+            return Regex.IsMatch(expression, @"^[A-Z_][A-Z0-9_]*\(.*\)$", RegexOptions.IgnoreCase);
+        }
+
+        // Check if it's just a function name without parentheses (for syntax error detection)
+        return expression.ToUpper() == "SUM" || expression.ToUpper() == "AVG" || expression.ToUpper() == "COUNT";
     }
 
     private DataValue EvaluateFunction(string expression)
@@ -249,12 +309,37 @@ public sealed class TableEntity
                 {
                     operatorStack.Pop(); // Remove the "("
                 }
+                else
+                {
+                    throw new InvalidExpressionException();
+                }
+            }
+            else
+            {
+                // Check if it's a valid token, if not throw appropriate exception
+                if (token.All(char.IsLetter))
+                {
+                    throw new InvalidNumberTokenException(token);
+                }
+                else if (token.Length == 1 && !char.IsLetterOrDigit(token[0]) && token != "(" && token != ")")
+                {
+                    throw new UnknownOperatorException(token);
+                }
+                else
+                {
+                    throw new InvalidNumberTokenException(token);
+                }
             }
         }
 
         while (operatorStack.Count > 0)
         {
-            output.Add(operatorStack.Pop());
+            var op = operatorStack.Pop();
+            if (op == "(")
+            {
+                throw new InvalidExpressionException();
+            }
+            output.Add(op);
         }
 
         return output;
@@ -277,7 +362,7 @@ public sealed class TableEntity
                     currentToken = "";
                 }
             }
-            else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')')
+            else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')' || c == '^')
             {
                 if (string.IsNullOrEmpty(currentToken) is false)
                 {

@@ -30,7 +30,7 @@ public sealed partial class DataValue
     }
 
     public override int GetHashCode()
-        => Match(
+        => this.Match(
             str => str?.GetHashCode() ?? 0,
             i => i.GetHashCode(),
             d => d.GetHashCode(),

@@ -49,7 +49,7 @@ public readonly record struct Percentage
 
     public override string ToString()
     {
-        return $"{Value}%";
+        return $"{this.Value}%";
     }
 
     /// <summary>
@@ -58,6 +58,6 @@ public readonly record struct Percentage
     /// </summary>
     public decimal ToDecimal()
     {
-        return Value / 100m;
+        return this.Value / 100m;
     }
 }

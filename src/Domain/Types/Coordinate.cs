@@ -22,7 +22,7 @@ public readonly record struct Coordinate
 
     public override string ToString()
     {
-        return $"{ColumnId.Value}{RowId.Value}";
+        return $"{this.ColumnId.Value}{this.RowId.Value}";
     }
 
     public static Coordinate Parse(string source)

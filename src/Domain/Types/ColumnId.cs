@@ -20,7 +20,7 @@ public readonly record struct ColumnId
     {
         char upper = char.ToUpper(value);
 
-        if ((int)'A' < (int)upper && (int)upper > (int)'Z')
+        if (upper < 'A' || upper > 'Z')
         {
             throw new ColumnIdOutOfRangeException(value);
         }
