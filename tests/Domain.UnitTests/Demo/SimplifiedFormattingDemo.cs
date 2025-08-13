@@ -76,15 +76,21 @@ public class SimplifiedFormattingDemo
         var directFunction = new Function("SUM(A1:A2)", typeof(int));
         table.SetCell(Coordinate.Parse("B2"), new DataValue(directFunction));
 
-        // Both should work correctly
+        // Both should work correctly and evaluate to the same result
         var formulaResult = table.GetValue(Coordinate.Parse("B1"));
         var functionResult = table.GetValue(Coordinate.Parse("B2"));
 
         formulaResult.IsT1.ShouldBeTrue();
         formulaResult.AsT1.ShouldBe(30);
 
-        functionResult.IsT6.ShouldBeTrue(); // Should be Function type
-        functionResult.AsT6.Value.ShouldBe("SUM(A1:A2)");
-        functionResult.AsT6.Format.ShouldBe(typeof(int));
+        // GetValue() should now evaluate functions and return the result
+        functionResult.IsT1.ShouldBeTrue(); // Should be the evaluated result
+        functionResult.AsT1.ShouldBe(30); // Same result as formula
+
+        // To access the raw function object, use GetCell() instead
+        var rawFunction = table.GetCell(Coordinate.Parse("B2"));
+        rawFunction.IsT6.ShouldBeTrue(); // Raw cell should be Function type
+        rawFunction.AsT6.Value.ShouldBe("SUM(A1:A2)");
+        rawFunction.AsT6.Format.ShouldBe(typeof(int));
     }
 }

@@ -128,6 +128,11 @@ public sealed partial class TableEntity
             return EvaluateFormula(cellValue.AsT0);
         }
 
+        if (cellValue.IsT6)
+        {
+            return EvaluateFunction(cellValue.AsT6.Value);
+        }
+
         return cellValue;
     }
 

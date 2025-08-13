@@ -28,22 +28,40 @@ public class TypeBasedFormattingDemo
         table.SetCell(Coordinate.Parse("B3"), new DataValue(percentFunction));
         table.SetCell(Coordinate.Parse("B4"), new DataValue(dataValueFunction));
 
-        // Act & Assert
+        // Act & Assert - GetValue() evaluates functions but ignores format type during evaluation
+        // The format type is stored in the Function object but doesn't affect the evaluation result
         var intResult = table.GetValue(Coordinate.Parse("B1"));
-        intResult.IsT6.ShouldBeTrue(); // Should be Function
-        intResult.AsT6.Format.ShouldBe(typeof(int));
+        intResult.IsT1.ShouldBeTrue(); // SUM always returns int for integer inputs
+        intResult.AsT1.ShouldBe(30); // SUM(A1:A2) = 10 + 20
 
         var decimalResult = table.GetValue(Coordinate.Parse("B2"));
-        decimalResult.IsT6.ShouldBeTrue(); // Should be Function
-        decimalResult.AsT6.Format.ShouldBe(typeof(decimal));
+        decimalResult.IsT1.ShouldBeTrue(); // SUM always returns int for integer inputs (format ignored)
+        decimalResult.AsT1.ShouldBe(30); // SUM(A1:A2) = 10 + 20
 
-        var percentResult = table.GetValue(Coordinate.Parse("B3"));
-        percentResult.IsT6.ShouldBeTrue(); // Should be Function
-        percentResult.AsT6.Format.ShouldBe(typeof(Percentage));
+        var percentageResult = table.GetValue(Coordinate.Parse("B3"));
+        percentageResult.IsT1.ShouldBeTrue(); // SUM always returns int for integer inputs (format ignored)
+        percentageResult.AsT1.ShouldBe(30); // SUM(A1:A2) = 10 + 20
 
         var dataValueResult = table.GetValue(Coordinate.Parse("B4"));
-        dataValueResult.IsT6.ShouldBeTrue(); // Should be Function
-        dataValueResult.AsT6.Format.ShouldBe(typeof(DataValue));
+        dataValueResult.IsT1.ShouldBeTrue(); // SUM always returns int for integer inputs (format ignored)
+        dataValueResult.AsT1.ShouldBe(30); // SUM(A1:A2) = 10 + 20
+
+        // To access the raw function objects, use GetCell() instead
+        var rawIntFunction = table.GetCell(Coordinate.Parse("B1"));
+        rawIntFunction.IsT6.ShouldBeTrue(); // Raw cell should be Function
+        rawIntFunction.AsT6.Format.ShouldBe(typeof(int));
+
+        var rawDecimalFunction = table.GetCell(Coordinate.Parse("B2"));
+        rawDecimalFunction.IsT6.ShouldBeTrue(); // Raw cell should be Function
+        rawDecimalFunction.AsT6.Format.ShouldBe(typeof(decimal));
+
+        var rawPercentFunction = table.GetCell(Coordinate.Parse("B3"));
+        rawPercentFunction.IsT6.ShouldBeTrue(); // Raw cell should be Function
+        rawPercentFunction.AsT6.Format.ShouldBe(typeof(Percentage));
+
+        var rawDataValueFunction = table.GetCell(Coordinate.Parse("B4"));
+        rawDataValueFunction.IsT6.ShouldBeTrue(); // Raw cell should be Function
+        rawDataValueFunction.AsT6.Format.ShouldBe(typeof(DataValue));
     }
 
     [TestMethod]
