@@ -9,6 +9,8 @@ public partial class DataValue
     public static DataValue operator *(DataValue left, DataValue right) => Mul(left, right);
     public static DataValue operator /(DataValue left, DataValue right) => Div(left, right);
 
+    public static DataValue Power(DataValue left, DataValue right) => Pow(left, right);
+
     public static DataValue operator +(DataValue left, int right) => Add(left, new DataValue(right));
     public static DataValue operator +(int left, DataValue right) => Add(new DataValue(left), right);
     public static DataValue operator +(DataValue left, decimal right) => Add(left, new DataValue(right));
@@ -177,6 +179,35 @@ public partial class DataValue
                 p2 => new DataValue(ToRatio(p) / ToRatio(p2)),
                 _f2 => Throw<Function>()
             ),
+            _f => Throw<Function>()
+        );
+    }
+
+    private static DataValue Pow(DataValue left, DataValue right)
+    {
+        return left.Match<DataValue>(
+            s => Throw<string>(),
+            i => right.Match<DataValue>(
+                _s => Throw<string>(),
+                i2 => new DataValue((decimal)Math.Pow(i, i2)),
+                d2 => new DataValue((decimal)Math.Pow(i, (double)d2)),
+                _b => Throw<bool>(),
+                _dt => Throw<DateTime>(),
+                _p => Throw<Percentage>(),
+                _f => Throw<Function>()
+            ),
+            d => right.Match<DataValue>(
+                _s => Throw<string>(),
+                i2 => new DataValue((decimal)Math.Pow((double)d, i2)),
+                d2 => new DataValue((decimal)Math.Pow((double)d, (double)d2)),
+                _b => Throw<bool>(),
+                _dt => Throw<DateTime>(),
+                _p => Throw<Percentage>(),
+                _f => Throw<Function>()
+            ),
+            _b => Throw<bool>(),
+            _dt => Throw<DateTime>(),
+            _p => Throw<Percentage>(),
             _f => Throw<Function>()
         );
     }

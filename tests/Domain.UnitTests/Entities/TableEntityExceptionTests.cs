@@ -80,7 +80,7 @@ public sealed class TableEntityExceptionTests
         var tableId = new TableId(Guid.NewGuid());
         var table = new TableEntity(tableId, "sample");
 
-        table.SetCell(Coordinate.Parse("A1"), new DataValue("=1^2"));
+        table.SetCell(Coordinate.Parse("A1"), new DataValue("=1&2"));
 
         Should.Throw<UnknownOperatorException>(() => table.GetValue(Coordinate.Parse("A1")));
     }

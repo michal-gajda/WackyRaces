@@ -4,8 +4,7 @@ using WackyRaces.Domain.Types;
 
 public sealed class CircularReferenceException : DomainException
 {
-    public CircularReferenceException(Coordinate coordinate)
-        : base($"Circular reference detected at cell {coordinate}")
+    public CircularReferenceException(Coordinate coordinate) : base($"Circular reference detected at cell {coordinate}")
     {
     }
 }

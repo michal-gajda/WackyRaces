@@ -167,7 +167,7 @@ public sealed partial class TableEntity
         return functionName switch
         {
             "SUM" => EvaluateSumFunction(arguments),
-            "AVG" => EvaluateAvgFunction(arguments),
+            "AVG" or "AVERAGE" => EvaluateAvgFunction(arguments),
             "COUNT" => EvaluateCountFunction(arguments),
             _ => throw new UnknownFunctionException(functionName),
         };
@@ -280,7 +280,7 @@ public sealed partial class TableEntity
 
         foreach (var token in tokens)
         {
-            if (IsCellReference(token) || IsNumber(token) || IsPercentage(token))
+            if (IsCellReference(token) || IsNumber(token) || IsPercentage(token) || IsFunctionCall(token))
             {
                 output.Add(token);
             }
@@ -361,7 +361,7 @@ public sealed partial class TableEntity
                     currentToken = string.Empty;
                 }
             }
-            else if (c is '+' || c is '-' || c is '*' || c is '/' || c is '(' || c is ')' || c is '^')
+            else if (c is '+' || c is '-' || c is '*' || c is '/' || c is '(' || c is ')' || c is '^' || c is '&')
             {
                 if (string.IsNullOrEmpty(currentToken) is false)
                 {
@@ -381,7 +381,44 @@ public sealed partial class TableEntity
             tokens.Add(currentToken);
         }
 
-        return tokens;
+        return this.MergeFunctionTokens(tokens);
+    }
+
+    private List<string> MergeFunctionTokens(List<string> tokens)
+    {
+        var mergedTokens = new List<string>();
+        var i = 0;
+
+        while (i < tokens.Count)
+        {
+            if (i < tokens.Count - 1 &&
+                tokens[i + 1] == "(" &&
+                tokens[i].All(char.IsLetter))
+            {
+                var functionToken = tokens[i];
+                var parenthesesLevel = 0;
+                i++;
+
+                while (i < tokens.Count)
+                {
+                    functionToken += tokens[i];
+                    if (tokens[i] == "(") parenthesesLevel++;
+                    else if (tokens[i] == ")") parenthesesLevel--;
+
+                    i++;
+                    if (parenthesesLevel == 0) break;
+                }
+
+                mergedTokens.Add(functionToken);
+            }
+            else
+            {
+                mergedTokens.Add(tokens[i]);
+                i++;
+            }
+        }
+
+        return mergedTokens;
     }
 
     private DataValue EvaluateRPN(List<string> rpnTokens)
@@ -395,6 +432,11 @@ public sealed partial class TableEntity
                 var coordinate = Coordinate.Parse(token);
                 var cellValue = this.GetValue(coordinate);
                 stack.Push(cellValue);
+            }
+            else if (IsFunctionCall(token))
+            {
+                var functionResult = EvaluateFunction(token);
+                stack.Push(functionResult);
             }
             else if (IsNumber(token) || IsPercentage(token))
             {
@@ -432,6 +474,7 @@ public sealed partial class TableEntity
                     "-" => left - right,
                     "*" => left * right,
                     "/" => left / right,
+                    "^" => DataValue.Power(left, right),
                     _ => throw new UnknownOperatorException(token),
                 };
 
@@ -462,9 +505,14 @@ public sealed partial class TableEntity
         return token.EndsWith('%') && Percentage.TryParse(token, out _);
     }
 
+    private bool IsFunctionCall(string token)
+    {
+        return token.Contains('(') && token.Contains(')') && Function.TryCreate(token, out _);
+    }
+
     private bool IsOperator(string token)
     {
-        return token is "+" || token is "-" || token is "*" || token is "/";
+        return token is "+" || token is "-" || token is "*" || token is "/" || token is "^";
     }
 
     private int GetPrecedence(string op)
@@ -473,6 +521,7 @@ public sealed partial class TableEntity
         {
             "+" or "-" => 1,
             "*" or "/" => 2,
+            "^" => 3,
             _ => 0,
         };
     }
