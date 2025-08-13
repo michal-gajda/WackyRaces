@@ -68,6 +68,57 @@ public sealed partial class TableEntity
         }
     }
 
+    /// <summary>
+    /// Inserts a new empty row after the specified row number, moving all existing rows below it down by one position.
+    /// </summary>
+    /// <param name="afterRowNumber">The row number after which to insert the new row (1-based)</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when afterRowNumber is less than 1</exception>
+    public void InsertRowAfter(int afterRowNumber)
+    {
+        if (afterRowNumber < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(afterRowNumber), "Row number must be greater than or equal to 1");
+        }
+
+        // Find all cells that need to be moved (rows greater than afterRowNumber)
+        var cellsToMove = this.cells
+            .Where(kvp => kvp.Key.RowId.Value > afterRowNumber)
+            .ToList();
+
+        // Find all cells that don't need to be moved but might have formulas that reference moved rows
+        var cellsToUpdateReferences = this.cells
+            .Where(kvp => kvp.Key.RowId.Value <= afterRowNumber)
+            .ToList();
+
+        // Remove the cells that need to be moved
+        foreach (var cellToMove in cellsToMove)
+        {
+            this.cells.Remove(cellToMove.Key);
+        }
+
+        // Re-add the moved cells with their row numbers incremented by 1 and formulas updated
+        foreach (var cellToMove in cellsToMove)
+        {
+            var newCoordinate = new Coordinate(
+                new RowId(cellToMove.Key.RowId.Value + 1),
+                cellToMove.Key.ColumnId);
+
+            // Update formula references in the moved cell
+            var updatedValue = UpdateFormulaReferencesForRowInsertion(cellToMove.Value, afterRowNumber);
+            this.cells[newCoordinate] = updatedValue;
+        }
+
+        // Update formula references in cells that weren't moved but might reference the moved rows
+        foreach (var cell in cellsToUpdateReferences)
+        {
+            var updatedValue = UpdateFormulaReferencesForRowInsertion(cell.Value, afterRowNumber);
+            if (!updatedValue.Equals(cell.Value))
+            {
+                this.cells[cell.Key] = updatedValue;
+            }
+        }
+    }
+
     private DataValue Recalculate(Coordinate coordinate)
     {
         var cellValue = this.GetCell(coordinate);
@@ -522,5 +573,65 @@ public sealed partial class TableEntity
             "^" => 3,
             _ => 0,
         };
+    }
+
+    /// <summary>
+    /// Updates formula references when a row is inserted, incrementing row numbers that are affected
+    /// </summary>
+    /// <param name="dataValue">The data value to update</param>
+    /// <param name="insertedAfterRow">The row number after which the insertion occurred</param>
+    /// <returns>Updated data value with corrected references</returns>
+    private DataValue UpdateFormulaReferencesForRowInsertion(DataValue dataValue, int insertedAfterRow)
+    {
+        // Process string values that start with "=" (formulas)
+        if (dataValue.IsT0 && dataValue.AsT0.StartsWith("="))
+        {
+            var formula = dataValue.AsT0;
+            var updatedFormula = UpdateRowReferencesInFormula(formula, insertedAfterRow);
+
+            return updatedFormula == formula ? dataValue : new DataValue(updatedFormula);
+        }
+
+        // Process Function objects (T6)
+        if (dataValue.IsT6)
+        {
+            var function = dataValue.AsT6;
+            var updatedFunctionValue = UpdateRowReferencesInFormula(function.Value, insertedAfterRow);
+
+            if (updatedFunctionValue != function.Value)
+            {
+                return new DataValue(new Function(updatedFunctionValue, function.Format));
+            }
+        }
+
+        return dataValue;
+    }    /// <summary>
+         /// Updates row references in a formula string, incrementing row numbers greater than the inserted row
+         /// </summary>
+         /// <param name="formula">The formula string to update</param>
+         /// <param name="insertedAfterRow">The row number after which the insertion occurred</param>
+         /// <returns>Updated formula string</returns>
+    private string UpdateRowReferencesInFormula(string formula, int insertedAfterRow)
+    {
+        // Pattern to match cell references like A1, B23, etc. (including in ranges like A1:A3)
+        var cellReferencePattern = @"\b([A-Z]+)(\d+)\b";
+
+        return Regex.Replace(formula, cellReferencePattern, match =>
+        {
+            var columnPart = match.Groups[1].Value;
+            var rowPart = match.Groups[2].Value;
+
+            if (int.TryParse(rowPart, out int rowNumber))
+            {
+                // If the referenced row is greater than the insertion point, increment it
+                if (rowNumber > insertedAfterRow)
+                {
+                    return $"{columnPart}{rowNumber + 1}";
+                }
+            }
+
+            // Return the original reference if no change is needed
+            return match.Value;
+        });
     }
 }
