@@ -172,7 +172,6 @@ public sealed partial class TableEntity
             _ => throw new UnknownFunctionException(functionName),
         };
     }
-
     private DataValue EvaluateSumFunction(string arguments)
     {
         var coordinates = ParseRange(arguments);
@@ -509,7 +508,6 @@ public sealed partial class TableEntity
     {
         return token.Contains('(') && token.Contains(')') && Function.TryCreate(token, out _);
     }
-
     private bool IsOperator(string token)
     {
         return token is "+" || token is "-" || token is "*" || token is "/" || token is "^";

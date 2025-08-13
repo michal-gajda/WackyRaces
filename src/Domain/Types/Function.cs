@@ -1,13 +1,17 @@
+namespace WackyRaces.Domain.Types;
+
 using WackyRaces.Domain.Exceptions;
 
 public readonly record struct Function
 {
     public string Value { get; private init; }
+    public Type Format { get; private init; }
 
-    public Function(string value)
+    public Function(string value, Type? format = null)
     {
         ValidateFunction(value);
         this.Value = value;
+        this.Format = format ?? typeof(decimal);
     }
 
     private static void ValidateFunction(string value)
@@ -18,6 +22,11 @@ public readonly record struct Function
         }
 
         var trimmedValue = value.Trim();
+
+        if (trimmedValue.StartsWith("="))
+        {
+            throw new InvalidFunctionValueException($"Function value should not start with '='. Use '{trimmedValue.Substring(1)}' instead of '{trimmedValue}'.");
+        }
 
         if (IsValidFunctionExpression(trimmedValue) is false)
         {
@@ -186,7 +195,7 @@ public readonly record struct Function
         {
             if (token.Contains('(') && token.Contains(')'))
             {
-                if (TryCreate(token, out Function nestedFunction))
+                if (TryCreate(token, this.Format, out Function nestedFunction))
                 {
                     nestedFunctions.Add(nestedFunction);
                 }
@@ -198,9 +207,14 @@ public readonly record struct Function
 
     public static bool TryCreate(string value, out Function function)
     {
+        return TryCreate(value, typeof(decimal), out function);
+    }
+
+    public static bool TryCreate(string value, Type? format, out Function function)
+    {
         try
         {
-            function = new Function(value);
+            function = new Function(value, format);
 
             return true;
         }
