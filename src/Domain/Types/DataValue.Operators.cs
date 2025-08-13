@@ -30,24 +30,28 @@ public sealed partial class DataValue
     }
 
     public override int GetHashCode()
-        => this.Match(
-            str => str?.GetHashCode() ?? 0,
-            i => i.GetHashCode(),
-            d => d.GetHashCode(),
-            b => b.GetHashCode(),
-            dt => dt.GetHashCode(),
-            p => p.GetHashCode(),
-            f => f.GetHashCode()
+    {
+        return this.Match(
+            stringValue => stringValue?.GetHashCode() ?? 0,
+            integerValue => integerValue.GetHashCode(),
+            decimalValue => decimalValue.GetHashCode(),
+            booleanValue => booleanValue.GetHashCode(),
+            dateTimeValue => dateTimeValue.GetHashCode(),
+            percentageValue => percentageValue.GetHashCode(),
+            formulaValue => formulaValue.GetHashCode()
         );
+    }
 
     private bool ValueEquals(DataValue other)
-        => this.Match(
-            str => other.TryPickT0(out var oStr, out _) && str == oStr,
-            i => other.TryPickT1(out var oInt, out _) && i == oInt,
-            d => other.TryPickT2(out var oDec, out _) && d == oDec,
-            b => other.TryPickT3(out var oBool, out _) && b == oBool,
-            dt => other.TryPickT4(out var oDt, out _) && dt == oDt,
-            p => other.TryPickT5(out var oP, out _) && p.Equals(oP),
-            f => other.TryPickT6(out var oF, out _) && f.Equals(oF)
+    {
+        return this.Match(
+            stringValue => other.TryPickT0(out var otherStringValue, out _) && stringValue == otherStringValue,
+            integerValue => other.TryPickT1(out var otherIntegerValue, out _) && integerValue == otherIntegerValue,
+            decimalValue => other.TryPickT2(out var otherDecimalValue, out _) && decimalValue == otherDecimalValue,
+            booleanValue => other.TryPickT3(out var otherBooleanValue, out _) && booleanValue == otherBooleanValue,
+            dateTimeValue => other.TryPickT4(out var otherDateTimeValue, out _) && dateTimeValue == otherDateTimeValue,
+            percentageValue => other.TryPickT5(out var otherPercentageValue, out _) && percentageValue.Equals(otherPercentageValue),
+            formulaValue => other.TryPickT6(out var otherFormulaValue, out _) && formulaValue.Equals(otherFormulaValue)
         );
+    }
 }

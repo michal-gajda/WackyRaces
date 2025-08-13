@@ -5,10 +5,16 @@ using WackyRaces.Domain.Exceptions;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
-public sealed class TableEntity
+public sealed partial class TableEntity
 {
     private readonly Dictionary<Coordinate, DataValue> cells = new();
     private readonly HashSet<Coordinate> evaluationStack = new();
+
+    [GeneratedRegex(@"^[A-Z]+\d+$", RegexOptions.None, 100)]
+    private static partial Regex CellReferenceRegex();
+
+    [GeneratedRegex(@"^[A-Z_][A-Z0-9_]*\([^)]*\)$", RegexOptions.IgnoreCase, 100)]
+    private static partial Regex FunctionRegex();
 
     public ReadOnlyDictionary<Coordinate, DataValue> Cells => this.cells.AsReadOnly();
 
@@ -51,6 +57,7 @@ public sealed class TableEntity
         }
 
         this.evaluationStack.Add(coordinate);
+
         try
         {
             return this.Recalculate(coordinate);
@@ -65,13 +72,11 @@ public sealed class TableEntity
     {
         var cellValue = this.GetCell(coordinate);
 
-        // If it's a string that starts with "=", treat it as a formula
         if (cellValue.IsT0 && cellValue.AsT0.StartsWith("="))
         {
             return EvaluateFormula(cellValue.AsT0);
         }
 
-        // Otherwise return the cell value as-is
         return cellValue;
     }
 
@@ -79,19 +84,15 @@ public sealed class TableEntity
     {
         try
         {
-            // Remove the "=" prefix
             var expression = formula.Substring(1);
 
-            // Check if it's a function call
             if (IsFunction(expression))
             {
                 return EvaluateFunction(expression);
             }
 
-            // Convert infix to postfix (RPN)
             var rpnTokens = ConvertToRPN(expression);
 
-            // Evaluate RPN expression
             return EvaluateRPN(rpnTokens);
         }
         catch (CircularReferenceException)
@@ -134,27 +135,24 @@ public sealed class TableEntity
         {
             throw;
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            return new DataValue($"#ERROR: {ex.Message}");
+            return new DataValue($"#ERROR: {exception.Message}");
         }
     }
 
     private bool IsFunction(string expression)
     {
-        // Check if it looks like a function call (has parentheses) or a function name
         if (expression.Contains("(") && expression.Contains(")"))
         {
-            return Regex.IsMatch(expression, @"^[A-Z_][A-Z0-9_]*\(.*\)$", RegexOptions.IgnoreCase);
+            return FunctionRegex().IsMatch(expression);
         }
 
-        // Check if it's just a function name without parentheses (for syntax error detection)
-        return expression.ToUpper() == "SUM" || expression.ToUpper() == "AVG" || expression.ToUpper() == "COUNT";
+        return expression.ToUpper() is "SUM" || expression.ToUpper() is "AVG" || expression.ToUpper() is "COUNT";
     }
 
     private DataValue EvaluateFunction(string expression)
     {
-        // Parse function name and arguments
         var openParen = expression.IndexOf('(');
         var closeParen = expression.LastIndexOf(')');
 
@@ -171,7 +169,7 @@ public sealed class TableEntity
             "SUM" => EvaluateSumFunction(arguments),
             "AVG" => EvaluateAvgFunction(arguments),
             "COUNT" => EvaluateCountFunction(arguments),
-            _ => throw new UnknownFunctionException(functionName)
+            _ => throw new UnknownFunctionException(functionName),
         };
     }
 
@@ -183,7 +181,8 @@ public sealed class TableEntity
         foreach (var coord in coordinates)
         {
             var cellValue = this.GetValue(coord);
-            if (cellValue.IsT1 || cellValue.IsT2) // int or decimal
+
+            if (cellValue.IsT1 || cellValue.IsT2)
             {
                 sum = sum + cellValue;
             }
@@ -201,7 +200,8 @@ public sealed class TableEntity
         foreach (var coord in coordinates)
         {
             var cellValue = this.GetValue(coord);
-            if (cellValue.IsT1 || cellValue.IsT2) // int or decimal
+
+            if (cellValue.IsT1 || cellValue.IsT2)
             {
                 sum = sum + cellValue;
                 count++;
@@ -224,7 +224,8 @@ public sealed class TableEntity
         foreach (var coord in coordinates)
         {
             var cellValue = this.GetValue(coord);
-            if (cellValue.IsT0 is false || string.IsNullOrEmpty(cellValue.AsT0) is false) // Not empty string
+
+            if (cellValue.IsT0 is false || string.IsNullOrEmpty(cellValue.AsT0) is false)
             {
                 count++;
             }
@@ -238,8 +239,8 @@ public sealed class TableEntity
 
         if (range.Contains(':'))
         {
-            // Range format like A1:A3
             var parts = range.Split(':');
+
             if (parts.Length != 2)
             {
                 throw new InvalidRangeFormatException(range);
@@ -248,7 +249,6 @@ public sealed class TableEntity
             var startCoord = Coordinate.Parse(parts[0].Trim());
             var endCoord = Coordinate.Parse(parts[1].Trim());
 
-            // For now, handle simple column ranges (same column, different rows)
             if (startCoord.ColumnId.Value == endCoord.ColumnId.Value)
             {
                 var startRow = Math.Min(startCoord.RowId.Value, endCoord.RowId.Value);
@@ -266,7 +266,6 @@ public sealed class TableEntity
         }
         else
         {
-            // Single cell reference
             coordinates.Add(Coordinate.Parse(range.Trim()));
         }
 
@@ -287,27 +286,26 @@ public sealed class TableEntity
             }
             else if (IsOperator(token))
             {
-                while (operatorStack.Count > 0 &&
-                       operatorStack.Peek() != "(" &&
-                       GetPrecedence(operatorStack.Peek()) >= GetPrecedence(token))
+                while (operatorStack.Count is > 0 && operatorStack.Peek() is not "(" && GetPrecedence(operatorStack.Peek()) >= GetPrecedence(token))
                 {
                     output.Add(operatorStack.Pop());
                 }
+
                 operatorStack.Push(token);
             }
-            else if (token == "(")
+            else if (token is "(")
             {
                 operatorStack.Push(token);
             }
-            else if (token == ")")
+            else if (token is ")")
             {
-                while (operatorStack.Count > 0 && operatorStack.Peek() != "(")
+                while (operatorStack.Count > 0 && operatorStack.Peek() is not "(")
                 {
                     output.Add(operatorStack.Pop());
                 }
-                if (operatorStack.Count > 0 && operatorStack.Peek() == "(")
+                if (operatorStack.Count > 0 && operatorStack.Peek() is "(")
                 {
-                    operatorStack.Pop(); // Remove the "("
+                    operatorStack.Pop();
                 }
                 else
                 {
@@ -316,12 +314,11 @@ public sealed class TableEntity
             }
             else
             {
-                // Check if it's a valid token, if not throw appropriate exception
                 if (token.All(char.IsLetter))
                 {
                     throw new InvalidNumberTokenException(token);
                 }
-                else if (token.Length == 1 && !char.IsLetterOrDigit(token[0]) && token != "(" && token != ")")
+                else if (token.Length is 1 && !char.IsLetterOrDigit(token[0]) && token is not "(" && token is not ")")
                 {
                     throw new UnknownOperatorException(token);
                 }
@@ -335,10 +332,12 @@ public sealed class TableEntity
         while (operatorStack.Count > 0)
         {
             var op = operatorStack.Pop();
-            if (op == "(")
+
+            if (op is "(")
             {
                 throw new InvalidExpressionException();
             }
+
             output.Add(op);
         }
 
@@ -348,7 +347,7 @@ public sealed class TableEntity
     private List<string> TokenizeExpression(string expression)
     {
         var tokens = new List<string>();
-        var currentToken = "";
+        var currentToken = string.Empty;
 
         for (int i = 0; i < expression.Length; i++)
         {
@@ -359,15 +358,15 @@ public sealed class TableEntity
                 if (string.IsNullOrEmpty(currentToken) is false)
                 {
                     tokens.Add(currentToken);
-                    currentToken = "";
+                    currentToken = string.Empty;
                 }
             }
-            else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '(' || c == ')' || c == '^')
+            else if (c is '+' || c is '-' || c is '*' || c is '/' || c is '(' || c is ')' || c is '^')
             {
                 if (string.IsNullOrEmpty(currentToken) is false)
                 {
                     tokens.Add(currentToken);
-                    currentToken = "";
+                    currentToken = string.Empty;
                 }
                 tokens.Add(c.ToString());
             }
@@ -433,14 +432,14 @@ public sealed class TableEntity
                     "-" => left - right,
                     "*" => left * right,
                     "/" => left / right,
-                    _ => throw new UnknownOperatorException(token)
+                    _ => throw new UnknownOperatorException(token),
                 };
 
                 stack.Push(result);
             }
         }
 
-        if (stack.Count != 1)
+        if (stack.Count is not 1)
         {
             throw new InvalidExpressionException();
         }
@@ -450,7 +449,7 @@ public sealed class TableEntity
 
     private bool IsCellReference(string token)
     {
-        return Regex.IsMatch(token, @"^[A-Z]+\d+$");
+        return CellReferenceRegex().IsMatch(token);
     }
 
     private bool IsNumber(string token)
@@ -465,7 +464,7 @@ public sealed class TableEntity
 
     private bool IsOperator(string token)
     {
-        return token == "+" || token == "-" || token == "*" || token == "/";
+        return token is "+" || token is "-" || token is "*" || token is "/";
     }
 
     private int GetPrecedence(string op)
@@ -474,7 +473,7 @@ public sealed class TableEntity
         {
             "+" or "-" => 1,
             "*" or "/" => 2,
-            _ => 0
+            _ => 0,
         };
     }
 }

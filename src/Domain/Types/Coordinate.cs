@@ -3,8 +3,11 @@ namespace WackyRaces.Domain.Types;
 using System.Text.RegularExpressions;
 using WackyRaces.Domain.Exceptions;
 
-public readonly record struct Coordinate
+public readonly partial record struct Coordinate
 {
+    [GeneratedRegex(@"^(?<columnId>[A-Z])(?<rowId>[0-9]+)$", RegexOptions.IgnoreCase, 100)]
+    private static partial Regex CoordinateParseRegex();
+
     public RowId RowId { get; private init; }
     public ColumnId ColumnId { get; init; }
 
@@ -27,11 +30,7 @@ public readonly record struct Coordinate
 
     public static Coordinate Parse(string source)
     {
-        var regexOptions = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
-        var pattern = "^(?<columnId>[a-zA-Z]{1})(?<rowId>[0-9]+)$";
-        var regex = new Regex(pattern, regexOptions, TimeSpan.FromMicroseconds(100));
-
-        var match = regex.Match(source);
+        var match = CoordinateParseRegex().Match(source);
 
         if (match.Success)
         {

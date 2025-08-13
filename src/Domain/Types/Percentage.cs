@@ -30,6 +30,7 @@ public readonly record struct Percentage
             throw new InvalidPercentageFormatException(trimmed);
         }
 
+
         return new Percentage(value);
     }
 
