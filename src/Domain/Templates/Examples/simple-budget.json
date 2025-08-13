@@ -1,0 +1,35 @@
+{
+  "Name": "Simple Budget Calculator",
+  "Description": "A basic budget template with your preferred JSON structure",
+  "Columns": [
+    { "Coordinate": "A1", "Title": "Category" },
+    { "Coordinate": "B1", "Title": "Budget" },
+    { "Coordinate": "C1", "Title": "Actual" },
+    { "Coordinate": "D1", "Title": "Difference" },
+    { "Coordinate": "E1", "Title": "% Variance" }
+  ],
+  "Rows": [
+    { "Coordinate": "A2", "Title": "Income" },
+    { "Coordinate": "A3", "Title": "Housing" },
+    { "Coordinate": "A4", "Title": "Food" },
+    { "Coordinate": "A5", "Title": "Transportation" },
+    { "Coordinate": "A6", "Title": "Entertainment" }
+  ],
+  "Cells": [
+    { "Coordinate": "D2", "DataValue": { "Value": "=SUM(C2,-B2)", "Type": "decimal" } },
+    { "Coordinate": "D3", "DataValue": { "Value": "=SUM(C3,-B3)", "Type": "decimal" } },
+    { "Coordinate": "D4", "DataValue": { "Value": "=SUM(C4,-B4)", "Type": "decimal" } },
+    { "Coordinate": "D5", "DataValue": { "Value": "=SUM(C5,-B5)", "Type": "decimal" } },
+    { "Coordinate": "D6", "DataValue": { "Value": "=SUM(C6,-B6)", "Type": "decimal" } },
+    { "Coordinate": "E2", "DataValue": { "Value": "=SUM(D2)", "Type": "percentage" } },
+    { "Coordinate": "E3", "DataValue": { "Value": "=SUM(D3)", "Type": "percentage" } },
+    { "Coordinate": "E4", "DataValue": { "Value": "=SUM(D4)", "Type": "percentage" } },
+    { "Coordinate": "E5", "DataValue": { "Value": "=SUM(D5)", "Type": "percentage" } },
+    { "Coordinate": "E6", "DataValue": { "Value": "=SUM(D6)", "Type": "percentage" } },
+    { "Coordinate": "A8", "DataValue": { "Value": "TOTAL", "Type": "text" } },
+    { "Coordinate": "B8", "DataValue": { "Value": "=SUM(B2:B6)", "Type": "decimal" } },
+    { "Coordinate": "C8", "DataValue": { "Value": "=SUM(C2:C6)", "Type": "decimal" } },
+    { "Coordinate": "D8", "DataValue": { "Value": "=SUM(C8,-B8)", "Type": "decimal" } },
+    { "Coordinate": "E8", "DataValue": { "Value": "=SUM(D8)", "Type": "percentage" } }
+  ]
+}

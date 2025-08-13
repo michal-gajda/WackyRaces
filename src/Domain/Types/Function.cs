@@ -44,6 +44,7 @@ public readonly record struct Function
             "COUNT",
             "MIN",
             "MAX",
+            "CONCAT",
         };
 
         if (expression.Contains('('))

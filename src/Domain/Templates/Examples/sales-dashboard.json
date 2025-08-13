@@ -1,0 +1,55 @@
+{
+  "Name": "Sales Performance Dashboard",
+  "Description": "Comprehensive sales dashboard with your preferred JSON structure - demonstrates Type as return value format",
+  "Columns": [
+    { "Coordinate": "A1", "Title": "Salesperson" },
+    { "Coordinate": "B1", "Title": "Q1 Sales" },
+    { "Coordinate": "C1", "Title": "Q2 Sales" },
+    { "Coordinate": "D1", "Title": "Q3 Sales" },
+    { "Coordinate": "E1", "Title": "Q4 Sales" },
+    { "Coordinate": "F1", "Title": "Total Sales" },
+    { "Coordinate": "G1", "Title": "Commission %" },
+    { "Coordinate": "H1", "Title": "Commission $" }
+  ],
+  "Rows": [
+    { "Coordinate": "A2", "Title": "Alice Johnson" },
+    { "Coordinate": "A3", "Title": "Bob Smith" },
+    { "Coordinate": "A4", "Title": "Carol Davis" },
+    { "Coordinate": "A5", "Title": "David Wilson" },
+    { "Coordinate": "A6", "Title": "Eva Brown" }
+  ],
+  "Cells": [
+    { "Coordinate": "F2", "DataValue": { "Value": "=SUM(B2:E2)", "Type": "decimal" } },
+    { "Coordinate": "F3", "DataValue": { "Value": "=SUM(B3:E3)", "Type": "decimal" } },
+    { "Coordinate": "F4", "DataValue": { "Value": "=SUM(B4:E4)", "Type": "decimal" } },
+    { "Coordinate": "F5", "DataValue": { "Value": "=SUM(B5:E5)", "Type": "decimal" } },
+    { "Coordinate": "F6", "DataValue": { "Value": "=SUM(B6:E6)", "Type": "decimal" } },
+    
+    { "Coordinate": "G2", "DataValue": { "Value": "0.05", "Type": "percentage" } },
+    { "Coordinate": "G3", "DataValue": { "Value": "0.04", "Type": "percentage" } },
+    { "Coordinate": "G4", "DataValue": { "Value": "0.06", "Type": "percentage" } },
+    { "Coordinate": "G5", "DataValue": { "Value": "0.045", "Type": "percentage" } },
+    { "Coordinate": "G6", "DataValue": { "Value": "0.055", "Type": "percentage" } },
+    
+    { "Coordinate": "H2", "DataValue": { "Value": "=SUM(F2,G2)", "Type": "decimal" } },
+    { "Coordinate": "H3", "DataValue": { "Value": "=SUM(F3,G3)", "Type": "decimal" } },
+    { "Coordinate": "H4", "DataValue": { "Value": "=SUM(F4,G4)", "Type": "decimal" } },
+    { "Coordinate": "H5", "DataValue": { "Value": "=SUM(F5,G5)", "Type": "decimal" } },
+    { "Coordinate": "H6", "DataValue": { "Value": "=SUM(F6,G6)", "Type": "decimal" } },
+    
+    { "Coordinate": "A8", "DataValue": { "Value": "TOTALS", "Type": "text" } },
+    { "Coordinate": "B8", "DataValue": { "Value": "=SUM(B2:B6)", "Type": "decimal" } },
+    { "Coordinate": "C8", "DataValue": { "Value": "=SUM(C2:C6)", "Type": "decimal" } },
+    { "Coordinate": "D8", "DataValue": { "Value": "=SUM(D2:D6)", "Type": "decimal" } },
+    { "Coordinate": "E8", "DataValue": { "Value": "=SUM(E2:E6)", "Type": "decimal" } },
+    { "Coordinate": "F8", "DataValue": { "Value": "=SUM(F2:F6)", "Type": "decimal" } },
+    { "Coordinate": "H8", "DataValue": { "Value": "=SUM(H2:H6)", "Type": "decimal" } },
+    
+    { "Coordinate": "A10", "DataValue": { "Value": "AVERAGES", "Type": "text" } },
+    { "Coordinate": "B10", "DataValue": { "Value": "=AVG(B2:B6)", "Type": "decimal" } },
+    { "Coordinate": "C10", "DataValue": { "Value": "=AVG(C2:C6)", "Type": "decimal" } },
+    { "Coordinate": "D10", "DataValue": { "Value": "=AVG(D2:D6)", "Type": "decimal" } },
+    { "Coordinate": "E10", "DataValue": { "Value": "=AVG(E2:E6)", "Type": "decimal" } },
+    { "Coordinate": "F10", "DataValue": { "Value": "=AVG(F2:F6)", "Type": "decimal" } }
+  ]
+}

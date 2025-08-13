@@ -1,0 +1,30 @@
+{
+  "Name": "Contact List with CONCAT",
+  "Description": "Demonstrates CONCAT function usage for string operations",
+  "Columns": [
+    { "Coordinate": "A1", "Title": "First Name" },
+    { "Coordinate": "B1", "Title": "Last Name" },
+    { "Coordinate": "C1", "Title": "Department" },
+    { "Coordinate": "D1", "Title": "Full Name" },
+    { "Coordinate": "E1", "Title": "Email" }
+  ],
+  "Rows": [
+    { "Coordinate": "A2", "Title": "John" },
+    { "Coordinate": "A3", "Title": "Jane" },
+    { "Coordinate": "A4", "Title": "Bob" }
+  ],
+  "Cells": [
+    { "Coordinate": "B2", "DataValue": { "Value": "Doe", "Type": "text" } },
+    { "Coordinate": "C2", "DataValue": { "Value": "Engineering", "Type": "text" } },
+    { "Coordinate": "B3", "DataValue": { "Value": "Smith", "Type": "text" } },
+    { "Coordinate": "C3", "DataValue": { "Value": "Marketing", "Type": "text" } },
+    { "Coordinate": "B4", "DataValue": { "Value": "Johnson", "Type": "text" } },
+    { "Coordinate": "C4", "DataValue": { "Value": "Sales", "Type": "text" } },
+    { "Coordinate": "D2", "DataValue": { "Value": "=CONCAT(A2,\" \",B2)", "Type": "text" } },
+    { "Coordinate": "D3", "DataValue": { "Value": "=CONCAT(A3,\" \",B3)", "Type": "text" } },
+    { "Coordinate": "D4", "DataValue": { "Value": "=CONCAT(A4,\" \",B4)", "Type": "text" } },
+    { "Coordinate": "E2", "DataValue": { "Value": "=CONCAT(A2,\".\",B2,\"@company.com\")", "Type": "text" } },
+    { "Coordinate": "E3", "DataValue": { "Value": "=CONCAT(A3,\".\",B3,\"@company.com\")", "Type": "text" } },
+    { "Coordinate": "E4", "DataValue": { "Value": "=CONCAT(A4,\".\",B4,\"@company.com\")", "Type": "text" } }
+  ]
+}
