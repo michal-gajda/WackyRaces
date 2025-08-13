@@ -15,4 +15,19 @@ public readonly record struct RowId
 
         this.Value = value;
     }
+
+    public RowId NextValue()
+    {
+        return new RowId(this.Value + 1);
+    }
+
+    public RowId PreviousValue()
+    {
+        if (this.Value == 1)
+        {
+            throw new RowIdOutOfRangeException(0);
+        }
+
+        return new RowId(this.Value - 1);
+    }
 }

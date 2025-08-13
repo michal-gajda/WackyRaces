@@ -27,4 +27,24 @@ public readonly record struct ColumnId
 
         this.Value = upper;
     }
+
+    public ColumnId NextValue()
+    {
+        if (this.Value == 'Z')
+        {
+            throw new ColumnIdOutOfRangeException('Z');
+        }
+
+        return new ColumnId((char)(this.Value + 1));
+    }
+
+    public ColumnId PreviousValue()
+    {
+        if (this.Value == 'A')
+        {
+            throw new ColumnIdOutOfRangeException('A');
+        }
+
+        return new ColumnId((char)(this.Value - 1));
+    }
 }
