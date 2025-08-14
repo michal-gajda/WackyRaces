@@ -1,9 +1,8 @@
+namespace WackyRaces.Domain.UnitTests.Templates;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using WackyRaces.Domain.Templates;
-using WackyRaces.Domain.Types;
-
-namespace WackyRaces.Domain.UnitTests.Templates;
 
 [TestClass]
 public sealed class SimpleJsonTemplateDefinitionTests

@@ -1,9 +1,8 @@
-using Shouldly;
-using WackyRaces.Domain.Types;
+namespace WackyRaces.Domain.UnitTests.Demo;
+
 using WackyRaces.Domain.Entities;
 using WackyRaces.Domain.Exceptions;
-
-namespace WackyRaces.Domain.UnitTests.Demo;
+using WackyRaces.Domain.Types;
 
 [TestClass]
 public class InvalidSyntaxDemo

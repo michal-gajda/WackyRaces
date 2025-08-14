@@ -1,7 +1,6 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
 namespace WackyRaces.Domain.Templates;
+
+using System.Text.Json.Serialization;
 
 /// <summary>
 /// Simplified JSON template definition with separate columns, rows, and cells

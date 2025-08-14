@@ -1,7 +1,7 @@
+namespace WackyRaces.Domain.Templates.Demo;
+
 using WackyRaces.Domain.Entities;
 using WackyRaces.Domain.Types;
-
-namespace WackyRaces.Domain.Templates.Demo;
 
 /// <summary>
 /// Demonstrates the InsertRowAfter functionality

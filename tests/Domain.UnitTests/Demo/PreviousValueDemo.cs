@@ -1,10 +1,9 @@
-using Shouldly;
-using WackyRaces.Domain.Types;
-
 namespace WackyRaces.Domain.UnitTests.Demo;
 
+using WackyRaces.Domain.Types;
+
 [TestClass]
-public class PreviousValueDemo
+public sealed class PreviousValueDemo
 {
     [TestMethod]
     public void ShouldDemonstrate_BidirectionalCellNavigation()

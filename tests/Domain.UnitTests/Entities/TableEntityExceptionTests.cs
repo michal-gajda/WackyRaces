@@ -1,6 +1,5 @@
 namespace WackyRaces.Domain.UnitTests.Entities;
 
-using Shouldly;
 using WackyRaces.Domain.Entities;
 using WackyRaces.Domain.Types;
 using WackyRaces.Domain.Exceptions;

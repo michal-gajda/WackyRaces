@@ -1,11 +1,10 @@
-using Shouldly;
+namespace WackyRaces.Domain.UnitTests.Demo;
+
 using WackyRaces.Domain.Entities;
 using WackyRaces.Domain.Types;
 
-namespace WackyRaces.Domain.UnitTests.Demo;
-
 [TestClass]
-public class TypeBasedFormattingDemo
+public sealed class TypeBasedFormattingDemo
 {
     [TestMethod]
     public void ShouldDemonstrate_TypeBasedFunctionFormatting()

@@ -1,12 +1,11 @@
-using Shouldly;
+namespace WackyRaces.Domain.UnitTests.Demo;
+
 using WackyRaces.Domain.Types;
 using WackyRaces.Domain.Exceptions;
 using WackyRaces.Domain.Entities;
 
-namespace WackyRaces.Domain.UnitTests.Demo;
-
 [TestClass]
-public class SimplifiedFormattingDemo
+public sealed class SimplifiedFormattingDemo
 {
     [TestMethod]
     public void ShouldCreate_FunctionWithDifferentTypes()

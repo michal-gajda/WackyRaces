@@ -1,8 +1,7 @@
-using WackyRaces.Domain.Entities;
-using WackyRaces.Domain.Templates;
-using WackyRaces.Domain.Types;
-
 namespace WackyRaces.Domain.Templates.Demo;
+
+using WackyRaces.Domain.Entities;
+using WackyRaces.Domain.Types;
 
 /// <summary>
 /// Demonstrates how to use the SimpleJsonTemplate system
@@ -45,7 +44,7 @@ public static class JsonTemplateDemo
         // Add some sample data
         table.SetCell(Coordinate.Parse("B2"), new DataValue(5000m)); // Income budget
         table.SetCell(Coordinate.Parse("C2"), new DataValue(4800m)); // Income actual
-        table.SetCell(Coordinate.Parse("B3"), new DataValue(3000m)); // Expenses budget  
+        table.SetCell(Coordinate.Parse("B3"), new DataValue(3000m)); // Expenses budget
         table.SetCell(Coordinate.Parse("C3"), new DataValue(3200m)); // Expenses actual
 
         // Show some calculated results

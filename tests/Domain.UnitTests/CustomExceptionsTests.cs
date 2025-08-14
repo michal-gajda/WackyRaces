@@ -1,8 +1,7 @@
 namespace WackyRaces.Domain.UnitTests;
 
-using WackyRaces.Domain.Types;
 using WackyRaces.Domain.Exceptions;
-using Shouldly;
+using WackyRaces.Domain.Types;
 
 [TestClass]
 public sealed class CustomExceptionsTests

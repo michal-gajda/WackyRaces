@@ -1,7 +1,6 @@
-using Shouldly;
-using WackyRaces.Domain.Types;
-
 namespace WackyRaces.Domain.UnitTests.Types;
+
+using WackyRaces.Domain.Types;
 
 [TestClass]
 public sealed class FunctionFormatTests

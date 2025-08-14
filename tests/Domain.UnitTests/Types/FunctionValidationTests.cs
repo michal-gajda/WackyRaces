@@ -1,8 +1,7 @@
-using Shouldly;
+namespace WackyRaces.Domain.UnitTests.Types;
+
 using WackyRaces.Domain.Types;
 using WackyRaces.Domain.Exceptions;
-
-namespace WackyRaces.Domain.UnitTests.Types;
 
 [TestClass]
 public sealed class FunctionValidationTests

@@ -1,8 +1,7 @@
-using Shouldly;
+namespace WackyRaces.Domain.UnitTests.Demo;
+
 using WackyRaces.Domain.Types;
 using WackyRaces.Domain.Entities;
-
-namespace WackyRaces.Domain.UnitTests.Demo;
 
 [TestClass]
 public class NextValueUsageExample

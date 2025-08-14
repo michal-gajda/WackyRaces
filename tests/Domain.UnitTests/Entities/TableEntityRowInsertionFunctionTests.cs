@@ -1,9 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shouldly;
+namespace WackyRaces.Domain.UnitTests.Entities;
+
 using WackyRaces.Domain.Entities;
 using WackyRaces.Domain.Types;
-
-namespace WackyRaces.Domain.UnitTests.Entities;
 
 [TestClass]
 public sealed class TableEntityRowInsertionFunctionTests

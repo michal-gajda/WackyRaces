@@ -1,8 +1,8 @@
+namespace WackyRaces.Domain.Templates;
+
 using System.Text.Json;
 using WackyRaces.Domain.Entities;
 using WackyRaces.Domain.Types;
-
-namespace WackyRaces.Domain.Templates;
 
 /// <summary>
 /// Loads and saves simple JSON templates with separated columns, rows, and cells
