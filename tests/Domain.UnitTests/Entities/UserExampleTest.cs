@@ -5,7 +5,7 @@ using WackyRaces.Domain.Entities;
 using WackyRaces.Domain.Types;
 
 [TestClass]
-public class UserExampleTest
+public sealed class UserExampleTest
 {
     [TestMethod]
     public void UserExample_InsertRowAfter2_ShouldWork()
