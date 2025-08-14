@@ -4,7 +4,7 @@ using WackyRaces.Domain.Types;
 namespace WackyRaces.Domain.UnitTests.Types;
 
 [TestClass]
-public class FunctionFormatTests
+public sealed class FunctionFormatTests
 {
     [TestMethod]
     public void ShouldCreate_FunctionWithDefaultFormat()

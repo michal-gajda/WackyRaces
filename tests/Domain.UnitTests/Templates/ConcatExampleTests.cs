@@ -6,7 +6,7 @@ using WackyRaces.Domain.Types;
 namespace WackyRaces.Domain.UnitTests.Templates;
 
 [TestClass]
-public class ConcatExampleTests
+public sealed class ConcatExampleTests
 {
     [TestMethod]
     public void LoadConcatExample_ShouldLoadSuccessfully()

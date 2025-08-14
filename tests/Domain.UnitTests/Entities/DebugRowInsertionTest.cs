@@ -5,7 +5,7 @@ using WackyRaces.Domain.Types;
 namespace WackyRaces.Domain.UnitTests.Entities;
 
 [TestClass]
-public class DebugRowInsertionTest
+public sealed class DebugRowInsertionTest
 {
     [TestMethod]
     public void Debug_InsertRowAfter_TraceExecution()

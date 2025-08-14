@@ -5,7 +5,7 @@ using WackyRaces.Domain.Types;
 namespace WackyRaces.Domain.UnitTests.Entities;
 
 [TestClass]
-public class ExpressionParsingTests
+public sealed class ExpressionParsingTests
 {
     [TestMethod]
     public void ShouldEvaluate_SumDividedBySum()

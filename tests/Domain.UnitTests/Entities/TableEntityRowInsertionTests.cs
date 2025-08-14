@@ -6,7 +6,7 @@ using WackyRaces.Domain.Types;
 namespace WackyRaces.Domain.UnitTests.Entities;
 
 [TestClass]
-public class TableEntityRowInsertionTests
+public sealed class TableEntityRowInsertionTests
 {
     private TableEntity CreateTestTable()
     {

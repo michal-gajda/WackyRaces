@@ -5,7 +5,7 @@ using WackyRaces.Domain.Exceptions;
 namespace WackyRaces.Domain.UnitTests.Types;
 
 [TestClass]
-public class FunctionValidationTests
+public sealed class FunctionValidationTests
 {
     [TestMethod]
     public void ShouldReject_FunctionValueWithEqualsPrefix()

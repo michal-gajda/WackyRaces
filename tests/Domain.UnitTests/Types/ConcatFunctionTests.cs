@@ -5,7 +5,7 @@ using WackyRaces.Domain.Types;
 namespace WackyRaces.Domain.UnitTests.Types;
 
 [TestClass]
-public class ConcatFunctionTests
+public sealed class ConcatFunctionTests
 {
     [TestMethod]
     public void ShouldCreate_ConcatFunctionWithStringFormat()

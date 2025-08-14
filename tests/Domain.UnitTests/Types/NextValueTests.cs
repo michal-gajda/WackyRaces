@@ -5,10 +5,10 @@ using WackyRaces.Domain.Exceptions;
 namespace WackyRaces.Domain.UnitTests.Types;
 
 [TestClass]
-public class NextValueTests
+public sealed class NextValueTests
 {
     [TestClass]
-    public class RowIdNextValueTests
+    public sealed class RowIdNextValueTests
     {
         [TestMethod]
         public void ShouldReturn_NextRowValue()
@@ -66,7 +66,7 @@ public class NextValueTests
     }
 
     [TestClass]
-    public class RowIdPreviousValueTests
+    public sealed class RowIdPreviousValueTests
     {
         [TestMethod]
         public void ShouldReturn_PreviousRowValue()
@@ -134,7 +134,7 @@ public class NextValueTests
     }
 
     [TestClass]
-    public class ColumnIdNextValueTests
+    public sealed class ColumnIdNextValueTests
     {
         [TestMethod]
         public void ShouldReturn_NextColumnValue()
@@ -228,7 +228,7 @@ public class NextValueTests
     }
 
     [TestClass]
-    public class ColumnIdPreviousValueTests
+    public sealed class ColumnIdPreviousValueTests
     {
         [TestMethod]
         public void ShouldReturn_PreviousColumnValue()

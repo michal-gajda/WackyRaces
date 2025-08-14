@@ -7,7 +7,7 @@ using WackyRaces.Domain.Types;
 namespace WackyRaces.Domain.UnitTests.Templates;
 
 [TestClass]
-public class SimpleJsonTemplateTests
+public sealed class SimpleJsonTemplateTests
 {
   [TestMethod]
   public void LoadFromJson_SimpleTemplate_ShouldCreateCorrectTable()

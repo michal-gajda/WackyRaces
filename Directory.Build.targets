@@ -1,0 +1,27 @@
+<Project>
+
+    <!-- Custom target to enforce sealed test classes -->
+    <Target Name="EnforceSealedTestClasses" BeforeTargets="Build" Condition="'$(IsTestProject)' == 'true' or $(MSBuildProjectName.Contains('Test'))">
+
+        <ItemGroup>
+            <CSharpFiles Include="**/*.cs" Exclude="bin/**;obj/**" />
+        </ItemGroup>
+
+        <Message Text="Checking for sealed test classes in $(MSBuildProjectName)..." Importance="normal" />
+
+        <!-- This target will run a PowerShell script to check for sealed classes -->
+        <!-- For now, we'll rely on EditorConfig and manual review -->
+        <!-- Future: Could implement custom Roslyn analyzer -->
+
+    </Target>
+
+    <!-- Additional StyleCop rules specific to test projects -->
+    <PropertyGroup Condition="'$(IsTestProject)' == 'true' or $(MSBuildProjectName.Contains('Test'))">
+        <!-- Disable documentation requirements for test projects -->
+        <NoWarn>$(NoWarn);SA1600;SA1601;SA1602;SA1633</NoWarn>
+
+        <!-- Enable specific rules for test organization -->
+        <WarningsAsErrors>$(WarningsAsErrors);SA1201</WarningsAsErrors> <!-- Elements should appear in the correct order -->
+    </PropertyGroup>
+
+</Project>

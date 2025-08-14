@@ -7,7 +7,7 @@ using WackyRaces.Domain.Types;
 namespace WackyRaces.Domain.UnitTests.Templates;
 
 [TestClass]
-public class SimpleJsonTemplateIntegrationTests
+public sealed class SimpleJsonTemplateIntegrationTests
 {
     [TestMethod]
     public void FullWorkflow_CreateTemplateFromCode_SaveLoad_ShouldWork()

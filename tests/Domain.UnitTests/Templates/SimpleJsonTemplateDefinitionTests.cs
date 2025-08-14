@@ -6,7 +6,7 @@ using WackyRaces.Domain.Types;
 namespace WackyRaces.Domain.UnitTests.Templates;
 
 [TestClass]
-public class SimpleJsonTemplateDefinitionTests
+public sealed class SimpleJsonTemplateDefinitionTests
 {
     [TestMethod]
     public void SimpleJsonTemplate_ShouldSerializeAndDeserialize()
