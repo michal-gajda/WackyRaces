@@ -24,7 +24,10 @@ public class NextValueUsageExample
             var coordinate = new Coordinate(currentRow, currentColumn);
             table.SetCell(coordinate, new DataValue(i * 10));
 
-            if (i < 3) currentRow = currentRow.NextValue(); // Move to next row
+            if (i < 3)
+            {
+                currentRow = currentRow.NextValue(); // Move to next row
+            }
         }
 
         // Move to column B, reset to row 1

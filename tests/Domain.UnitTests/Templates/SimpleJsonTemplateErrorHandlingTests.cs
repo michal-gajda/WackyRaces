@@ -97,6 +97,7 @@ public sealed class SimpleJsonTemplateErrorHandlingTests
     try
     {
       var table = SimpleJsonTemplateLoader.LoadFromJson(jsonWithInvalidCellCoordinate);
+
       // If it succeeds, that's fine - the system handled it gracefully
       table.ShouldNotBeNull();
     }
@@ -126,6 +127,7 @@ public sealed class SimpleJsonTemplateErrorHandlingTests
     try
     {
       var table = SimpleJsonTemplateLoader.LoadFromJson(jsonWithMissingDataValue);
+
       // If it handles gracefully, verify the result
       table.ShouldNotBeNull();
     }
@@ -254,9 +256,9 @@ public sealed class SimpleJsonTemplateErrorHandlingTests
     var table = SimpleJsonTemplateLoader.LoadFromJson(jsonWithEmptyValues);
 
     // Assert
-    table.GetCell(Coordinate.Parse("A1")).AsT0.ShouldBe("");
-    table.GetCell(Coordinate.Parse("A2")).AsT0.ShouldBe("");
-    table.GetCell(Coordinate.Parse("B2")).AsT0.ShouldBe("");
+    table.GetCell(Coordinate.Parse("A1")).AsT0.ShouldBe(string.Empty);
+    table.GetCell(Coordinate.Parse("A2")).AsT0.ShouldBe(string.Empty);
+    table.GetCell(Coordinate.Parse("B2")).AsT0.ShouldBe(string.Empty);
   }
 
   [TestMethod]
@@ -274,7 +276,7 @@ public sealed class SimpleJsonTemplateErrorHandlingTests
   {
     // Arrange
     var table = new TableEntity(new TableId(Guid.NewGuid()), "Test");
-    var invalidPath = ""; // Empty path
+    var invalidPath = string.Empty; // Empty path
 
     // Act & Assert
     Should.Throw<ArgumentException>(() => SimpleJsonTemplateLoader.SaveToJsonFile(table, invalidPath));

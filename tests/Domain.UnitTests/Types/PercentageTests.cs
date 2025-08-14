@@ -1,7 +1,5 @@
 namespace WackyRaces.Domain.UnitTests.Types;
 
-using Shouldly;
-using WackyRaces.Domain.Types;
 using WackyRaces.Domain.Exceptions;
 
 [TestClass]

@@ -33,7 +33,7 @@ public sealed class CustomExceptionsTests
     public void EmptyPercentageText_ShouldThrowCustomException()
     {
         // Act & Assert
-        var exception = Should.Throw<EmptyPercentageTextException>(() => Percentage.Parse(""));
+        var exception = Should.Throw<EmptyPercentageTextException>(() => Percentage.Parse(string.Empty));
         exception.ShouldBeOfType<EmptyPercentageTextException>();
         exception.Message.ShouldContain("Percentage text cannot be null, empty, or contain only whitespace characters");
     }

@@ -1,67 +1,67 @@
 <Project>
 
-    <PropertyGroup>
-        <!-- Enable all .NET analyzers -->
-        <AnalysisLevel>latest</AnalysisLevel>
-        <AnalysisMode>All</AnalysisMode>
+  <PropertyGroup>
+    <!-- Enable all .NET analyzers -->
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>All</AnalysisMode>
 
-        <!-- Treat warnings as errors -->
-        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-        <WarningsAsErrors />
-        <WarningsNotAsErrors />
+    <!-- Treat warnings as errors -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <WarningsNotAsErrors />
 
-        <!-- Enable nullable reference types -->
-        <Nullable>enable</Nullable>
+    <!-- Enable nullable reference types -->
+    <Nullable>enable</Nullable>
 
-        <!-- Use latest C# language version -->
-        <LangVersion>latest</LangVersion>
+    <!-- Use latest C# language version -->
+    <LangVersion>latest</LangVersion>
 
-        <!-- Enable deterministic builds -->
-        <Deterministic>true</Deterministic>
+    <!-- Enable deterministic builds -->
+    <Deterministic>true</Deterministic>
 
-        <!-- File-scoped namespaces enforcement -->
-        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    </PropertyGroup>
+    <!-- File-scoped namespaces enforcement -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
 
-    <!-- Code style rules -->
-    <PropertyGroup>
-        <!-- File-scoped namespaces -->
-        <WarningsAsErrors>$(WarningsAsErrors);IDE0161</WarningsAsErrors>
+  <!-- Code style rules -->
+  <PropertyGroup>
+    <!-- File-scoped namespaces -->
+    <WarningsAsErrors>$(WarningsAsErrors);IDE0161</WarningsAsErrors>
 
-        <!-- Prefer explicit accessibility modifiers -->
-        <WarningsAsErrors>$(WarningsAsErrors);IDE0040</WarningsAsErrors>
+    <!-- Prefer explicit accessibility modifiers -->
+    <WarningsAsErrors>$(WarningsAsErrors);IDE0040</WarningsAsErrors>
 
-        <!-- Use pattern matching -->
-        <WarningsAsErrors>$(WarningsAsErrors);IDE0078</WarningsAsErrors>
+    <!-- Use pattern matching -->
+    <WarningsAsErrors>$(WarningsAsErrors);IDE0078</WarningsAsErrors>
 
-        <!-- Remove unnecessary usings -->
-        <WarningsAsErrors>$(WarningsAsErrors);IDE0005</WarningsAsErrors>
-    </PropertyGroup>
+    <!-- Remove unnecessary usings -->
+    <WarningsAsErrors>$(WarningsAsErrors);IDE0005</WarningsAsErrors>
+  </PropertyGroup>
 
-    <!-- Custom analyzer rules for sealed classes in test projects -->
-    <PropertyGroup Condition="'$(IsTestProject)' == 'true' or $(MSBuildProjectName.Contains('Test'))">
-        <!-- Define custom rule for sealed test classes -->
-        <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    </PropertyGroup>
+  <!-- Custom analyzer rules for sealed classes in test projects -->
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true' or $(MSBuildProjectName.Contains('Test'))">
+    <!-- Define custom rule for sealed test classes -->
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
 
-    <!-- Package references that should be included in all projects -->
-    <ItemGroup>
-        <!-- Code analysis packages -->
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
+  <!-- Package references that should be included in all projects -->
+  <ItemGroup>
+    <!-- Code analysis packages -->
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
 
-        <!-- StyleCop analyzers for code style -->
-        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+    <!-- StyleCop analyzers for code style -->
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
-    <!-- StyleCop configuration -->
-    <ItemGroup>
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Condition="Exists('$(MSBuildThisFileDirectory)stylecop.json')" />
-    </ItemGroup>
+  <!-- StyleCop configuration -->
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Condition="Exists('$(MSBuildThisFileDirectory)stylecop.json')" />
+  </ItemGroup>
 
 </Project>
