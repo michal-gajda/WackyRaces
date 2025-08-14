@@ -1,8 +1,8 @@
+namespace WackyRaces.Domain.UnitTests.Entities;
+
 using Shouldly;
 using WackyRaces.Domain.Entities;
 using WackyRaces.Domain.Types;
-
-namespace WackyRaces.Domain.UnitTests.Entities;
 
 [TestClass]
 public class UserExampleTest

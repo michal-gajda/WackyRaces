@@ -1,9 +1,9 @@
+namespace WackyRaces.Domain.UnitTests.Entities;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using WackyRaces.Domain.Entities;
 using WackyRaces.Domain.Types;
-
-namespace WackyRaces.Domain.UnitTests.Entities;
 
 [TestClass]
 public sealed class CheckRowInsertionBehaviorTest
